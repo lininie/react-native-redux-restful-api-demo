@@ -4,4 +4,4 @@ import {
 
 import App from './src/App';
 
-AppRegistry.registerComponent('chatApp', () => App);
+AppRegistry.registerComponent('FetchRecipe', () => App);

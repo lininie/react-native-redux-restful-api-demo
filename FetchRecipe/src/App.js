@@ -1,44 +1,38 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, combineReduxers, compose} from 'redux';
+import { createStore, applyMiddleware, combineReduxers, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import reducer from './reducers'
 
-class App extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-      </View>
+const loggerMiddleware = createLogger({ predicate: (getState, action) => __DEV__ });
+
+function configureStore(initialState) {
+    const enhancer = compose(
+        applyMiddleware(
+            thunkMiddleware,
+            loggerMiddleware,
+        ),
     );
-  }
+    return createStore(reducer, initialState, enhancer);
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+const store = configureStore({});
 
+import {
+    AppRegistry,
+    StyleSheet,
+    Text,
+    View
+} from 'react-native';
+
+const App = () => (
+    <Provider store={store}>
+        <View>
+            <Text>
+                Hello
+            </Text>
+        </View>
+    </Provider>
+);
 export default App;
